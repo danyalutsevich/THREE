@@ -17,7 +17,7 @@ let uniforms = {
 
   time: { type: 'f', value: 0. },
   photo: { value: new THREE.TextureLoader().load('./yeezus.jpg') },
-  displacement:{value: new THREE.TextureLoader().load('./disp.jpg')},
+  displacement:{value: new THREE.TextureLoader().load('./yandhi.jpg')},
 
 }
 
@@ -40,7 +40,6 @@ function animate() {
   requestAnimationFrame(animate)
   renderer.render(scene, camera)
   
-  // const clock = new Date().getSeconds();
   milliseconds+=new Date().getMilliseconds();
   uniforms.time = {type:"f",value:milliseconds}
   
