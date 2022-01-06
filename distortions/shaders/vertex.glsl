@@ -2,8 +2,11 @@
 varying vec2 vUv;
 varying vec3 vertexNormal;
 
+varying vec3 vPosition;
 
 void main(){
+
+    vPosition = position;
 
     vUv = uv;
     vertexNormal =normalize(normalMatrix * normal); 
