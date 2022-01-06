@@ -44,7 +44,6 @@ function onMouseMove( event ) {
 	// calculate objects intersecting the picking ray
 	const intersects = raycaster.intersectObjects( scene.children );
 
-  console.log(intersects[0].point)
   if(intersects.length>0){
     uniforms.mouse.value = intersects[0].point
 

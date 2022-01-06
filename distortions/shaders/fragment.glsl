@@ -53,11 +53,12 @@ void main(){
     vec2 direction=normalize(vPosition.xy-mouse.xy);
     float dist=distance(vPosition,mouse);
     float prox=1.-map(dist,0.,.4,0.,1.);
-    // prox=clamp(prox,0.,1.);
+    prox=clamp(prox,0.,1.);
     
     vec2 zoomedUv=vUv+direction*prox*progress;
+    vec2 zoomedUv1=mix(vUv,mouse.xy+vec2(0.5),prox*progress);
     
-    vec4 sheesh=texture2D(sheesh,zoomedUv);
+    vec4 sheesh=texture2D(sheesh,zoomedUv1);
     
     // gl_FragColor = vec4(direction,1.,1.);
     gl_FragColor=sheesh;
