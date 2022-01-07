@@ -52,7 +52,7 @@ void main(){
     
     vec2 direction=normalize(vPosition.xy-mouse.xy);
     float dist=distance(vPosition,mouse);
-    float prox=1.-map(dist,0.,.4,0.,1.);
+    float prox=1.-map(dist,0.,1.,0.,1.);
     prox=clamp(prox,0.,1.);
     
     vec2 zoomedUv=vUv+direction*prox*progress;
