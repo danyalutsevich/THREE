@@ -1,4 +1,6 @@
 //thanks Yuri Artiukh for your tutorials
+// AND ALSO THANKS TO The Art of Code VIDEO https://www.youtube.com/watch?v=6IWXkV82oyY
+
 uniform float time;
 uniform float rotation;
 uniform float progress;
