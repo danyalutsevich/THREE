@@ -11,7 +11,7 @@ const renderer = new THREE.WebGL1Renderer({ antialias: true })
 renderer.setSize(innerWidth, innerHeight)
 renderer.setPixelRatio(window.devicePixelRatio)
 document.body.appendChild(renderer.domElement)
-camera.position.set(0, 0, 2)
+camera.position.set(0, 0, 1)
 
 const raycaster = new THREE.Raycaster()
 
@@ -63,7 +63,7 @@ gui.add(uniforms.rotation, 'value', -10, 10, 0.001)
 gui.add(uniforms.Cx, 'value', -1, 1, 0.01)
 gui.add(uniforms.Cy, 'value', -1, 1, 0.01)
 
-const plane = new THREE.Mesh(new THREE.PlaneGeometry(2.5, 2.5, 10, 10), new THREE.ShaderMaterial({
+const plane = new THREE.Mesh(new THREE.PlaneGeometry(1, 1, 1, 1), new THREE.ShaderMaterial({
 
   vertexShader: vert,
   fragmentShader: frag,

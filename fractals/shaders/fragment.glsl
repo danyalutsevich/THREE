@@ -4,8 +4,9 @@
 uniform float time;
 uniform float rotation;
 uniform float progress;
-uniform float Cy;
+
 uniform float Cx;
+uniform float Cy;
 
 uniform vec3 mouse;
 
@@ -31,18 +32,34 @@ float value(float x, float y, float Cx1, float Cy1) {
 	float z1 = x;
 	float z2 = y;
 
-
 	for (float i=0.;i < maxIterations;i+=1.) {
 
-		z1 += (z1 * z1) - (z2 * z2) + Cx;
+		z1 = (z1 * z1) - (z2 * z2) + Cx;
 
-		z2 += (2.* z1 * z2) + Cy;
+		z2 = (2.* z1 * z2) + Cy;
 
 		if ((z1 * z1) + (z2 * z2) >= 4.) {
 
 			return i;
 		}
-		// i++;
+	
+	}
+
+	return maxIterations;
+
+}
+
+float value(vec2 z, vec2 c) {
+
+	for (float i=0.;i < maxIterations;i+=1.) {
+
+        z = vec2((z.x*z.x)-(z.y*z.y)+c.x,(2.*z.x*z.y)+c.y);
+
+		if (length(z) >= 2.) {
+
+			return i;
+		}
+	
 	}
 
 	return maxIterations;
@@ -54,12 +71,11 @@ float value(float x, float y, float Cx1, float Cy1) {
 
 void main(){
     
-   float color = value(vUv.x*5.-2.5,vUv.y*5.-2.5,Cx,Cy);
+    //float color = value(vUv.x*5.-2.5,vUv.y*5.-2.5,Cx,Cy);
+   float color = value(vUv+mouse.xy,vec2(Cx,Cy));
 
-//    float color = value(0.,0.,vUv.x,vUv.y);
 
-    // float color = 1.
-    color= color/(maxIterations/40.);
+    color= color/(maxIterations/10.);
     gl_FragColor = vec4(color+0.1,color+0.3,color+0.1,1.);
 
     
