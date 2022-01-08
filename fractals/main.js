@@ -11,7 +11,7 @@ const renderer = new THREE.WebGL1Renderer({ antialias: true })
 renderer.setSize(innerWidth, innerHeight)
 renderer.setPixelRatio(window.devicePixelRatio)
 document.body.appendChild(renderer.domElement)
-camera.position.set(0, 0, 1)
+camera.position.set(0, 0, 0.7)
 
 const raycaster = new THREE.Raycaster()
 
@@ -19,51 +19,61 @@ const raycaster = new THREE.Raycaster()
 
 let uniforms = {
   
- 
-  progress: { type: 'f', value: 0 },
+  time:{type: "f", value: 0 },
+  progress: { type: 'f', value: 2 },
   rotation: { type: 'f', value: 0 },
   mouse: { type: 'v3', value: new THREE.Vector3() },
-  Cx:{type:'f',value:0},
-  Cy:{type:'f',value:0}
+  Cx:{type:'f',value:0.3},
+  Cy:{type:'f',value:0.47}
 
 
   
 }
 
 const mouse = new THREE.Vector2();
+let mouseup=false
+
 
 function onMouseMove( event ) {
   
   // calculate mouse position in normalized device coordinates
 	// (-1 to +1) for both components
-  
-	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+  if(mouseup){
 
-  raycaster.setFromCamera( mouse, camera );
+    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1+0.5;
+    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1+0.5;
 
-	// calculate objects intersecting the picking ray
-	const intersects = raycaster.intersectObjects( scene.children );
-
-  if(intersects.length>0){
-    uniforms.mouse.value = intersects[0].point
-
+    raycaster.setFromCamera( mouse, camera );
+    
+    // calculate objects intersecting the picking ray
+    const intersects = raycaster.intersectObjects( scene.children );
+    
+    if(intersects.length>0){
+      uniforms.mouse.value = intersects[0].point
+      
+    }
+    
+    renderer.render( scene, camera );
   }
-
-	renderer.render( scene, camera );
 
 }
 
 renderer.domElement.addEventListener('mousemove',onMouseMove)
+renderer.domElement.addEventListener('mousedown',()=>{
+  mouseup=true
+})
+renderer.domElement.addEventListener('mouseup',()=>{
+  mouseup=false
+})
 
 
 const gui = new dat.GUI()
-gui.add(uniforms.progress, 'value', -1, 1, 0.01)
-gui.add(uniforms.rotation, 'value', -10, 10, 0.001)
+gui.add(uniforms.progress, 'value', 0.001, 10, 0.01)
+gui.add(uniforms.rotation, 'value', -2, 2, 0.001)
 gui.add(uniforms.Cx, 'value', -1, 1, 0.01)
 gui.add(uniforms.Cy, 'value', -1, 1, 0.01)
 
-const plane = new THREE.Mesh(new THREE.PlaneGeometry(1, 1, 1, 1), new THREE.ShaderMaterial({
+const plane = new THREE.Mesh(new THREE.PlaneGeometry(2, 1, 1, 1), new THREE.ShaderMaterial({
 
   vertexShader: vert,
   fragmentShader: frag,
@@ -75,16 +85,50 @@ scene.add(plane)
 
 let milliseconds = 0;
 
-
+let Cvalue=0
+let CvalueFlag=false
 function animate() {
+  console.clear()
 
   requestAnimationFrame(animate)
   renderer.render(scene, camera)
 
-  milliseconds += new Date().getMilliseconds();
-  uniforms.time = { type: "f", value: milliseconds }
+  // milliseconds += new Date().getMilliseconds();
+  milliseconds +=500
+  uniforms.time.value=milliseconds
 
-  // console.log(new Date().getMilliseconds())
+  // uniforms.Cx.value=Math.sin(milliseconds/1000000)
+  // uniforms.Cy.value=1-Math.sin(milliseconds/1000000)
+  if(!CvalueFlag){
+
+    Cvalue+=0.0005
+    
+  }
+  else{
+    
+    Cvalue-=0.0005
+
+  }
+  if(Cvalue>1){
+    CvalueFlag=true
+
+  }
+
+  if(Cvalue<-1){
+
+    CvalueFlag=false
+
+  }
+  // uniforms.progress.value+=0.001
+  console.log(Math.log(uniforms.progress.value))
+  console.log(Cvalue)
+  console.log(uniforms.progress.value)
+
+  // uniforms.Cx.value=Cvalue
+  // uniforms.Cy.value=0.74
+
+
+
 }
 
 animate()
