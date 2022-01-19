@@ -20,7 +20,7 @@ const raycaster = new THREE.Raycaster()
 let uniforms = {
   
   time:{type: "f", value: 0 },
-  progress: { type: 'f', value: 2 },
+  progress: { type: 'f', value: 0.41 },
   rotation: { type: 'f', value: 0 },
   mouse: { type: 'v3', value: new THREE.Vector3() },
   Cx:{type:'f',value:0.3},
@@ -71,7 +71,7 @@ const gui = new dat.GUI()
 gui.add(uniforms.progress, 'value', 0.001, 10, 0.01)
 gui.add(uniforms.rotation, 'value', -2, 2, 0.001)
 gui.add(uniforms.Cx, 'value', -1, 1, 0.01)
-gui.add(uniforms.Cy, 'value', -1, 1, 0.01)
+gui.add(uniforms.Cy, 'value', -1, 1, 0.00001)
 
 const plane = new THREE.Mesh(new THREE.PlaneGeometry(2, 1, 1, 1), new THREE.ShaderMaterial({
 
@@ -87,8 +87,8 @@ let milliseconds = 0;
 
 let Cvalue=0
 let CvalueFlag=false
+
 function animate() {
-  console.clear()
 
   requestAnimationFrame(animate)
   renderer.render(scene, camera)
@@ -97,8 +97,7 @@ function animate() {
   milliseconds +=500
   uniforms.time.value=milliseconds
 
-  // uniforms.Cx.value=Math.sin(milliseconds/1000000)
-  // uniforms.Cy.value=1-Math.sin(milliseconds/1000000)
+  uniforms.Cx.value=Math.sin(milliseconds/1000000)/2
   if(!CvalueFlag){
 
     Cvalue+=0.0005
@@ -120,12 +119,9 @@ function animate() {
 
   }
   // uniforms.progress.value+=0.001
-  console.log(Math.log(uniforms.progress.value))
-  console.log(Cvalue)
-  console.log(uniforms.progress.value)
-
   // uniforms.Cx.value=Cvalue
-  // uniforms.Cy.value=0.74
+
+
 
 
 
